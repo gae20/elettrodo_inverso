@@ -139,9 +139,9 @@ if __name__ == '__main__':
         except RuntimeError as e:
             print(f"⚠️ Errore configurazione GPU: {e}")
 
-    dataset_path_test  = "../datasets/precordials_test.h5"
-    dataset_path_val   = "../datasets/precordials_val.h5"
-    dataset_path_train = "../datasets/precordials_train.h5"
+    dataset_path_test  = "../../datasets/unlabelled_precordials_test.h5"
+    dataset_path_val   = "../../datasets/unlabelled_precordials_val.h5"
+    dataset_path_train = "../../datasets/unlabelled_precordials_train.h5"
     
     with h5py.File(dataset_path_test, 'r') as f:
         # Prende solo gli ultimi 6 canali
@@ -156,7 +156,7 @@ if __name__ == '__main__':
 
     input_shape = (SAMPLES_PER_WINDOW, 6)
     output_dims = 16 # 1 normale + 15 anomalie
-    EP = 30        
+    EP = 20
     LR = 1e-3 
     BS = 256
     save_path = 'best_model_precordials.weights.h5'

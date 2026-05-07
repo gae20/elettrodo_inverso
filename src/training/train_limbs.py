@@ -35,7 +35,10 @@ def evaluater(x_test, y_test, model, path):
     print(f"\n> Generazione report e matrice per: {os.path.basename(path)}")
     y_pred = model.predict(x_test, batch_size=32)
     num_classes = y_pred.shape[-1]
+    
+    # Rimosso il threshold. Il modello sceglie semplicemente la classe con probabilità più alta.
     y_pred_idx = np.argmax(y_pred, axis=1)
+    
     acc = len(np.where(y_pred_idx==y_test)[0])/y_pred_idx.shape[0]
     
     C = confusion_matrix(y_test, y_pred_idx, labels=range(num_classes))
@@ -110,7 +113,7 @@ def train_model(model, train_data, val_data, x_test_list, y_test_list, save_path
     
     callbacks = [
         ModelCheckpoint(save_path, monitor='val_f1_score', verbose=1, save_best_only=True, save_weights_only=True, mode='max'),
-        EarlyStopping(monitor='val_f1_score', patience=10, verbose=1, mode='max', restore_best_weights=True),
+        EarlyStopping(monitor='val_f1_score', patience=4, verbose=1, mode='max', restore_best_weights=True),
         ReduceLROnPlateau(monitor='val_f1_score', factor=0.5, patience=5, min_lr=1e-5, mode='max', verbose=1)
     ]
     
@@ -152,9 +155,9 @@ if __name__ == '__main__':
             print(f"⚠️ Errore configurazione GPU: {e}")
 
     # I path qui suppongono che il dataset si trovi in prova/ o in una directory di data (lo lasciamo cosi per compatibilità)
-    dataset_path_test  = "../datasets/limbs_test.h5"
-    dataset_path_val   = "../datasets/limbs_val.h5"
-    dataset_path_train = "../datasets/limbs_train.h5"
+    dataset_path_test  = "../../datasets/unlabelled_limbs_test.h5"
+    dataset_path_val   = "../../datasets/unlabelled_limbs_val.h5"
+    dataset_path_train = "../../datasets/unlabelled_limbs_train.h5"
     
     with h5py.File(dataset_path_test, 'r') as f:
         # Prende solo i primi 6 canali
@@ -173,10 +176,10 @@ if __name__ == '__main__':
 
     input_shape = (SAMPLES_PER_WINDOW, 6)
     output_dims = 6 # 1 normale + 5 anomalie
-    EP = 100
+    EP = 50
     LR = 1e-3 
     BS = 256
-    save_path = 'best_model_limbs.weights.h5'
+    save_path = 'best_model_unlabelled_limbs.weights.h5'
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
     print(f"--- CONFIGURAZIONE RILEVATA ---")
@@ -186,7 +189,7 @@ if __name__ == '__main__':
     train_gen = H5DataGenerator(dataset_path_train, batch_size=BS, num_classes=output_dims, shuffle=True, balance_class1=True)
     val_gen = H5DataGenerator(dataset_path_val, batch_size=BS, num_classes=output_dims, shuffle=False, balance_class1=False)
 
-    model = build_model(input_shape, output_dims, dropout_rate=0.3)
+    model = build_model(input_shape, output_dims)
     model.summary()
 
     train_model(

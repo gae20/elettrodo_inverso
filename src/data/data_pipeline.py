@@ -2,7 +2,6 @@ import os
 import sys
 import numpy as np
 import pyedflib
-import boto3
 import tempfile
 import gc
 from scipy import signal
@@ -16,30 +15,8 @@ from utils.config import (
     ACTIVE_SYNTH_CLASSES, QUALITY_CFG
 )
 
-# --- S3 CONFIGURATION ---
-from dotenv import load_dotenv
-
-# Carica le credenziali dal file .env nella directory principale
-env_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
-load_dotenv(dotenv_path=env_path)
-
-BUCKET = "btw-ml-data"
-BASE_PATH = "polito-thesis/"
-ECG_PATH = BASE_PATH + "record%s.edf"
-
-# Cartella locale dove sono i file EDF scaricati dalla console S3
+# Cartella locale dove sono i file EDF estratti
 LOCAL_DATASETS_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'datasets', 'dataset')
-
-s3_client = boto3.client('s3')
-
-def read_s3_object(bucket_name, object_key, raise_errors=False):
-    try:
-        response = s3_client.get_object(Bucket=bucket_name, Key=object_key)
-        return response['Body'].read()
-    except Exception as e:
-        if raise_errors:
-            raise e
-        return None
 
 def _parse_edf_file(filepath):
     """
@@ -85,18 +62,13 @@ def read_edf_data(bytes_data):
 
 def get_ecg(ecgId):
     """
-    Carica un ECG per ID. Cerca prima in locale (datasets/record{id}.edf),
-    poi prova a scaricarlo da S3.
+    Carica un ECG per ID. Cerca in locale (datasets/dataset/record{id}.edf)
     """
     local_path = os.path.join(LOCAL_DATASETS_DIR, f"record{ecgId}.edf")
     if os.path.exists(local_path):
-        print(f"[LOCAL] Lettura da: {local_path}")
+        # print(f"[LOCAL] Lettura da: {local_path}")
         return _parse_edf_file(local_path)
 
-    print(f"[S3] record{ecgId}.edf non trovato in locale, scarico da S3...")
-    data = read_s3_object(BUCKET, ECG_PATH % ecgId)
-    if data:
-        return read_edf_data(data)
     return None
 
 # --- PREPROCESSING PIPELINE ---
@@ -452,42 +424,6 @@ def check_ecg_quality(ecg, cfg=QUALITY_CFG, lead_indices=None):
 
     valid_ecg = (valid_leads >= min_valid)
     reason = "OK" if valid_ecg else "too_many_bad_leads"
-
-    # --- Structural Misplacement Detection (RL-RA / RL-LA) ---
-    # Sfrutta la fisica del triangolo di Einthoven:
-    # Se RL e RA sono invertiti, la nuova derivazione II misura LL-RL (vicino a 0).
-    # Se RL e LA sono invertiti, la nuova derivazione III misura LL-RL (vicino a 0).
-    if valid_ecg and 0 in indices and 1 in indices and 2 in indices:
-        idx_I = indices.index(0)
-        idx_II = indices.index(1)
-        idx_III = indices.index(2)
-
-        res_I = lead_results[idx_I].get("global_result", {})
-        res_II = lead_results[idx_II].get("global_result", {})
-        res_III = lead_results[idx_III].get("global_result", {})
-        
-        ptp_I = res_I.get("ptp", 1e6)
-        ptp_II = res_II.get("ptp", 1e6)
-        ptp_III = res_III.get("ptp", 1e6)
-        std_II = res_II.get("std", 1e6)
-        std_III = res_III.get("std", 1e6)
-        med_I = res_I.get("median_abs", 1e6)
-        med_II = res_II.get("median_abs", 1e6)
-        med_III = res_III.get("median_abs", 1e6)
-
-        # Rilevamento RL-RA: Lead II è patologicamente piatta rispetto a I e III.
-        is_II_flat = (ptp_II < 600 or std_II < 50.0)
-        is_II_smaller_ptp = (ptp_II < ptp_I * 0.6) and (ptp_II < ptp_III * 0.6)
-        if is_II_flat or is_II_smaller_ptp:
-            valid_ecg = False
-            reason = "structural_RL_RA"
-            
-        # Rilevamento RL-LA: Lead III è patologicamente piatta rispetto a I e II.
-        is_III_flat = (ptp_III < 600 or std_III < 50.0)
-        is_III_smaller_ptp = (ptp_III < ptp_I * 0.6) and (ptp_III < ptp_II * 0.6)
-        if valid_ecg and (is_III_flat or is_III_smaller_ptp):
-            valid_ecg = False
-            reason = "structural_RL_LA"
 
     return {
         "global_valid": valid_ecg,
