@@ -1,0 +1,1559 @@
+[
+  {
+    "id": "669089",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9989,
+    "n_windows": 57,
+    "text": "Inversione periferiche, tracciato da ripetere.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "674515",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9896,
+    "n_windows": 57,
+    "text": "errata posizione elettrodi degli arti.\nripetere.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "677835",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9987,
+    "n_windows": 57,
+    "text": "ecg da ripetere. probabile mal posizionamento degli elettrodi derivazioni periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "680929",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9964,
+    "n_windows": 57,
+    "text": "Possibile malposizionamento elettrodi periferici, ripetere traccaito.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "681896",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "703302",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9984,
+    "n_windows": 57,
+    "text": "inversione periferiche, ripetere tracciato.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "704054",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9932,
+    "n_windows": 56,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "706319",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 55,
+    "text": "verosimile inversione delle derivazioni periferiche. ECG da ripetere.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "706942",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "707850",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 0.9937,
+    "n_windows": 57,
+    "text": "Inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "708950",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9996,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "710526",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "possibile inversione elettrodi, ripetere tracciato.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "712793",
+    "predicted_class": 3,
+    "class_name": "LA-LL",
+    "confidence": 0.9708,
+    "n_windows": 57,
+    "text": "malposizionamento elettrodi.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "717048",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9897,
+    "n_windows": 57,
+    "text": "cavi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "720038",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9997,
+    "n_windows": 57,
+    "text": "inversione elettrodi.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "722020",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9973,
+    "n_windows": 57,
+    "text": "Possibile inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "731943",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9978,
+    "n_windows": 15,
+    "text": "possibile malposizionamento periferiche (DI negativa)",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "737632",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9948,
+    "n_windows": 57,
+    "text": "elettrodi derivazioni periferiche verosimilmente mal posizionati.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "741829",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9762,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "744961",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.99,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "746288",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "inversione elettrodi periferici.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "786335",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9941,
+    "n_windows": 57,
+    "text": "inversione elettrodi.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "788297",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9922,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "795143",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9612,
+    "n_windows": 57,
+    "text": "ripetere tracciato, periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "795193",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9963,
+    "n_windows": 57,
+    "text": "ripetere tracciato, periferiche errate.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "798994",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9978,
+    "n_windows": 57,
+    "text": "C6 SEMBRA C1. PROBABILE SCAMBIO DI ELETTRODI.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "801042",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9965,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "808126",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "Probabile malposizionamento cavi precordiali e periferici.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "818127",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "inversione periferiche, controllare posizionamento V1-v2.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "818304",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9995,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "819030",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9997,
+    "n_windows": 57,
+    "text": "POSSIBILE INVERSIONE ELETTRODI PERIFERICI. UTILE RIPETERE ECG.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "825504",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9993,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "834140",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9866,
+    "n_windows": 57,
+    "text": "elettodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "836160",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.989,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "838572",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "posizione elettrodi arti da rivedere.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "840472",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9799,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "862266",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9511,
+    "n_windows": 55,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "862323",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9607,
+    "n_windows": 117,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "865848",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 53,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "882760",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9847,
+    "n_windows": 49,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "885529",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9987,
+    "n_windows": 57,
+    "text": "possible inversione elettrodi precordiali.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "895119",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.994,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "895600",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "898844",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9997,
+    "n_windows": 56,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "899436",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9923,
+    "n_windows": 57,
+    "text": "possibile malposizionamento precordiali.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "903277",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9864,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "904387",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9696,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "905644",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9985,
+    "n_windows": 51,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "909171",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "912855",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "913973",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "913974",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9993,
+    "n_windows": 29,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "920094",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9982,
+    "n_windows": 57,
+    "text": "eletrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "930372",
+    "predicted_class": 3,
+    "class_name": "LA-LL",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "936115",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.999,
+    "n_windows": 57,
+    "text": "errore posizione elettrodi arti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "936123",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9951,
+    "n_windows": 57,
+    "text": "verifica posizione elettrodi arti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "936126",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9597,
+    "n_windows": 57,
+    "text": "elettrodi arti posizionamento errato.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "936789",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9959,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "937288",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "posizione elettrodi arti da rivedere.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "943986",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 0.9996,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "944523",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9971,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "944704",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9978,
+    "n_windows": 57,
+    "text": "tracciato non correttamente visualizzabile sulle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "949909",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9981,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "950055",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "950614",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9743,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "959640",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9944,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "960895",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "960908",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "984274",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9602,
+    "n_windows": 57,
+    "text": "Sospetta inversione elettrodi. Ripetere tracciato.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1006863",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1008214",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9996,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1008266",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9996,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1014816",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9975,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1021919",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9992,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1022120",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9851,
+    "n_windows": 57,
+    "text": "verificare corretto posizionamento elettrodi periferici. Onda p negativa in d1.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1022782",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9971,
+    "n_windows": 57,
+    "text": "non registrata un derivazione , possibile inversione degli elettrodi , ripetre ecg.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1025250",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 0.9984,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1028052",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1031218",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9969,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1034760",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "inversione elettrodi periferici.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1038913",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9972,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1049097",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9865,
+    "n_windows": 55,
+    "text": "verificare posizione elettrodi arti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1050332",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9835,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1052177",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9698,
+    "n_windows": 57,
+    "text": "posizione elettrodi arti scorretta.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1052210",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 0.9985,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1054389",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.992,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1058021",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 0.9988,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1059298",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9997,
+    "n_windows": 57,
+    "text": "onde Q in DI e aVL, sospetta inversione elettrodi. Ripetere tracciato.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1061238",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9809,
+    "n_windows": 37,
+    "text": "verosimile inversione degli elettrodi.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1063712",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.974,
+    "n_windows": 57,
+    "text": "verificare posizione elettrodi degli arti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1064290",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1066258",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9762,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1070095",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9742,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1073588",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1073696",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9991,
+    "n_windows": 57,
+    "text": "probabile non corretto posizionamento elettrodi periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1074509",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1075488",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1075537",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.998,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1082616",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9987,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1083868",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9987,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1093235",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1093344",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1094994",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1096356",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9979,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1096622",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9884,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1098397",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9965,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1106422",
+    "predicted_class": 4,
+    "class_name": "ROT_ORA",
+    "confidence": 0.9524,
+    "n_windows": 57,
+    "text": "possibile inversione cavi periferici.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1109065",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9958,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1109628",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9953,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1110380",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9983,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1111329",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9906,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1114661",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 0.9996,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1116879",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9992,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1120222",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9903,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1130890",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9968,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1131268",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 25,
+    "text": "verificare posizione elettrodi arti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1131823",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9856,
+    "n_windows": 53,
+    "text": "Probabile non posizionamento corretto degli elettrodi nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1131878",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9994,
+    "n_windows": 49,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1131957",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9963,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1131977",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9803,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1132027",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.96,
+    "n_windows": 48,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1132210",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9979,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1134750",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "verosimike inversione elettrodi nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1135546",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9986,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1139942",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9687,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1139957",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9928,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1140163",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 55,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1144022",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9984,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1146379",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9646,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1146720",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9987,
+    "n_windows": 57,
+    "text": "possibile inversione precordiali.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1147411",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1148227",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9908,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1151343",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9994,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1159463",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9958,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1160024",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.999,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1161231",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1161242",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1161894",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1166985",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 53,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1170885",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9777,
+    "n_windows": 57,
+    "text": "Elettrodi periferici invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1172621",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9984,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1183538",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1186833",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1193374",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9978,
+    "n_windows": 57,
+    "text": "inversione periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1194492",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 0.9972,
+    "n_windows": 57,
+    "text": "posizione elettrodi arti da verificare.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1196478",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9976,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1203090",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1207341",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9795,
+    "n_windows": 57,
+    "text": "malposizionamento elettrodi.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1208180",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 0.9996,
+    "n_windows": 57,
+    "text": "Possibile inversione precordiali.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1209810",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1218815",
+    "predicted_class": 3,
+    "class_name": "LA-LL",
+    "confidence": 0.9996,
+    "n_windows": 57,
+    "text": "dubbio malposizionamento di elettrodi periferici.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1218875",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9861,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1220327",
+    "predicted_class": 0,
+    "class_name": "normale",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "possibile malposizionamento elettrodi.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1229741",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9993,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1229746",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1230473",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.981,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1236516",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9975,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1237041",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9993,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1240611",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9999,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1245831",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9986,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1247864",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9964,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1248607",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9932,
+    "n_windows": 57,
+    "text": "elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1249082",
+    "predicted_class": 2,
+    "class_name": "RA-LL",
+    "confidence": 0.9826,
+    "n_windows": 54,
+    "text": "Ripetuto per elettrodi invertiti.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1250579",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9992,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1251321",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1251922",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9884,
+    "n_windows": 45,
+    "text": "posizione elettrodi arti da rivedere.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1255337",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9965,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1257110",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 1.0,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1258529",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9956,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1259020",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9998,
+    "n_windows": 57,
+    "text": "periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1261367",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9993,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1263636",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9988,
+    "n_windows": 57,
+    "text": "derivazioni periferiche invertite.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  },
+  {
+    "id": "1264927",
+    "predicted_class": 1,
+    "class_name": "LA-RA",
+    "confidence": 0.9993,
+    "n_windows": 57,
+    "text": "elettrodi invertiti nelle periferiche.",
+    "zip_path": "c:\\Users\\cancr\\OneDrive\\Desktop\\tesi\\datasets\\dataset_ssl.zip"
+  }
+]
