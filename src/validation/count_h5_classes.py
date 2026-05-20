@@ -69,5 +69,5 @@ def analyze_h5_datasets(dataset_dir):
 
 if __name__ == "__main__":
     # Percorso cartella datasets relativa allo script (src/validation/..)
-    dataset_dir = os.path.join(os.path.dirname(__file__), '../..', 'datasets')
+    dataset_dir = os.path.join(os.path.dirname(__file__), '../../..', 'datasets')
     analyze_h5_datasets(dataset_dir)

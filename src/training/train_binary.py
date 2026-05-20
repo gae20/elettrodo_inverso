@@ -146,7 +146,7 @@ if __name__ == '__main__':
     train_gen = H5DataGeneratorBinary(dataset_path_train, batch_size=BS, shuffle=True)
     val_gen = H5DataGeneratorBinary(dataset_path_val, batch_size=BS, shuffle=False)
 
-    model = build_model(input_shape, output_dims, dropout_rate=0.3)
+    model = build_model(input_shape, output_dims)
     
     train_model(
         model, train_gen, val_gen, 
