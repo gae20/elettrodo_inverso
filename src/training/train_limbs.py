@@ -154,48 +154,70 @@ if __name__ == '__main__':
         except RuntimeError as e:
             print(f"⚠️ Errore configurazione GPU: {e}")
 
-    # I path qui suppongono che il dataset si trovi in prova/ o in una directory di data (lo lasciamo cosi per compatibilità)
-    dataset_path_test  = "../../datasets/unlabelled_limbs_test.h5"
-    dataset_path_val   = "../../datasets/unlabelled_limbs_val.h5"
-    dataset_path_train = "../../datasets/unlabelled_limbs_train.h5"
+    def robust_scale_ecg(sigs_array, eps=1e-8):
+        x = sigs_array.astype(np.float32)
+        medians = np.median(x, axis=1, keepdims=True)
+        q75, q25 = np.percentile(x, [75, 25])
+        iqr_global = q75 - q25
+        scale_global = iqr_global / 1.34896
+        scale_global = max(scale_global, eps)
+        x_norm = (x - medians) / scale_global
+        return x_norm
+
+    # --- CONFIGURAZIONE PATH DATASET (FINAL NOISE) ---
+    dataset_dir = "../../datasets/unlabelled_simulated_final"
+    dataset_path_val   = os.path.join(dataset_dir, "unlabelled_z_median_limbs_val.h5")
+    dataset_path_train = os.path.join(dataset_dir, "unlabelled_z_median_limbs_train.h5")
     
+    # Usiamo il test set di validazione reale standard (quello ricreato oggi)
+    dataset_path_test = "../../datasets/labelled_z_median_limbs_test_validation.h5"
+    print(f"Caricamento dati di test REALI da: {dataset_path_test}")
     with h5py.File(dataset_path_test, 'r') as f:
-        # Prende solo i primi 6 canali
+        # I dati sono GIÀ normalizzati con Robust Scaler dallo script testset_validation.py
         x_test_raw = f['X'][:, :6, :]
         x_test = np.transpose(x_test_raw, (0, 2, 1))
         y_test = f['Y'][:]
         
+    print(f"Caricamento dati di validazione da: {dataset_path_val}")
     with h5py.File(dataset_path_val, 'r') as f:
+        # I dati simulati di validazione sono GIÀ normalizzati
         x_val_raw = f['X'][:, :6, :]
         x_val_eval = np.transpose(x_val_raw, (0, 2, 1))
         y_val_eval = f['Y'][:]
 
+    print(f"Verifica dataset di training da: {dataset_path_train}")
     with h5py.File(dataset_path_train, 'r') as f:
         y_train_all = f['Y'][:]
-        print(f"Verifica Dataset Train: Label Range [{np.min(y_train_all)}, {np.max(y_train_all)}], Unique: {np.unique(y_train_all)}")
+        print(f"  Label Range: [{np.min(y_train_all)}, {np.max(y_train_all)}], Unique: {np.unique(y_train_all)}")
 
     input_shape = (SAMPLES_PER_WINDOW, 6)
     output_dims = 6 # 1 normale + 5 anomalie
     EP = 50
     LR = 1e-3 
     BS = 256
-    save_path = 'best_model_unlabelled_limbs.weights.h5'
+    
+    # Cartella per i pesi e i risultati (Final Multi-Level Noise)
+    out_weights_dir = 'unlabelled_z_median_weights_and_cm'
+    os.makedirs(out_weights_dir, exist_ok=True)
+    save_path = os.path.join(out_weights_dir, 'PROVA_best_model_targeted_noise_limbs.weights.h5')
+    
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
-    print(f"--- CONFIGURAZIONE RILEVATA ---")
+    print(f"\n--- CONFIGURAZIONE RILEVATA ---")
     print(f"Batch Size: {BS}")
     print(f"Input Shape: {input_shape}")
+    print(f"Output weights: {save_path}")
     
-    train_gen = H5DataGenerator(dataset_path_train, batch_size=BS, num_classes=output_dims, shuffle=True, balance_class1=True)
-    val_gen = H5DataGenerator(dataset_path_val, batch_size=BS, num_classes=output_dims, shuffle=False, balance_class1=False)
+    train_gen = H5DataGenerator(dataset_path_train, batch_size=BS, num_classes=output_dims, shuffle=True)
+    val_gen = H5DataGenerator(dataset_path_val, batch_size=BS, num_classes=output_dims, shuffle=False)
 
     model = build_model(input_shape, output_dims)
-    model.summary()
+    # model.summary()
 
     train_model(
         model, train_gen, val_gen, 
         [x_test, x_val_eval], [y_test, y_val_eval], 
         save_path, EP, LR, BS, 
-        os.path.join(base_dir, "limbs_cm_test.png"), 
-        os.path.join(base_dir, "limbs_cm_val.png")
+        os.path.join(out_weights_dir, "targeted_noise_cm_test.png"), 
+        os.path.join(out_weights_dir, "targeted_noise_cm_val.png")
     )

@@ -112,6 +112,88 @@ def all_leads_preprocessing(signals_dict):
 
 # --- AUGMENTATION (MISPLACEMENTS) ---
 
+def apply_electrode_gain(
+    signals_dict,
+    fs=FS_OLD,
+    gain_range=(0.8, 1.2),      # Moltiplicatore random per elettrodo
+    emg_sigma_range=(2.0, 15.0), # Rumore leggero
+    wander_amp_range=(10.0, 80.0),
+    noise_multiplier=1.0        # AGGIUNTO: moltiplicatore per rumore specifico
+):
+    """
+    Applica guadagno variabile e rumore leggero agli elettrodi fisici (RA, LA, LL).
+    
+    Questa augmentation simula:
+    1. Differenze di contatto/impedenza (Gain) -> risolve confusioni geometriche.
+    2. Rumore ambientale leggero -> aggiunge robustezza.
+    """
+    limb_ref = next((signals_dict[l] for l in ('I', 'II', 'III') if l in signals_dict), None)
+    if limb_ref is None:
+        return signals_dict
+
+    n_samples = len(limb_ref)
+    t = np.arange(n_samples) / fs
+
+    # Generazione parametri indipendenti per RA, LA, LL
+    elec_mods = {}
+    for elec in ('RA', 'LA', 'LL'):
+        gain   = np.random.uniform(*gain_range)
+        sigma  = np.random.uniform(*emg_sigma_range) * noise_multiplier
+        emg    = np.random.normal(0.0, sigma, n_samples)
+        amp    = np.random.uniform(*wander_amp_range) * noise_multiplier
+        freq   = np.random.uniform(0.1, 0.4)
+        phase  = np.random.uniform(0.0, 2.0 * np.pi)
+        wander = amp * np.sin(2.0 * np.pi * freq * t + phase)
+        elec_mods[elec] = {'gain': gain, 'noise': emg + wander}
+
+    g_ra, n_ra = elec_mods['RA']['gain'], elec_mods['RA']['noise']
+    g_la, n_la = elec_mods['LA']['gain'], elec_mods['LA']['noise']
+    g_ll, n_ll = elec_mods['LL']['gain'], elec_mods['LL']['noise']
+
+    noisy = {}
+    for lead, sig in signals_dict.items():
+        s = np.asarray(sig, dtype=np.float64)
+        if lead == 'I':   # LA - RA
+            noisy[lead] = (s * ((g_la + g_ra)/2)) + (n_la - n_ra)
+        elif lead == 'II':  # LL - RA
+            noisy[lead] = (s * ((g_ll + g_ra)/2)) + (n_ll - n_ra)
+        elif lead == 'III': # LL - LA
+            noisy[lead] = (s * ((g_ll + g_la)/2)) + (n_ll - n_la)
+        elif lead == 'aVr':
+            noisy[lead] = (s * ((g_la + g_ll + 2*g_ra)/4)) - (n_la + n_ll - 2*n_ra)/2
+        elif lead == 'aVl':
+            noisy[lead] = (s * ((2*g_la + g_ra + g_ll)/4)) + (n_la - n_ra/2 - n_ll/2)
+        elif lead == 'aVf':
+            noisy[lead] = (s * ((2*g_ll + g_ra + g_la)/4)) + (n_ll - n_ra/2 - n_la/2)
+        else:
+            noisy[lead] = sig
+    return noisy
+
+
+def add_extra_noise(signals_dict, multiplier=1.5, fs=FS_OLD):
+    """
+    Aggiunge un surplus di rumore EMG e Baseline Wander a un segnale già esistente.
+    Utile per differenziare le classi più rumorose (es. ROT_ANT).
+    """
+    noisy = {}
+    n_samples = len(next(iter(signals_dict.values())))
+    t = np.arange(n_samples) / fs
+    
+    for lead, sig in signals_dict.items():
+        # Calibrato per alzare il MAD di circa 5-7 uV
+        sigma = np.random.uniform(5.0, 15.0) * (multiplier - 1.0)
+        emg = np.random.normal(0.0, sigma, n_samples)
+        
+        amp = np.random.uniform(20.0, 50.0) * (multiplier - 1.0)
+        freq = np.random.uniform(0.1, 0.4)
+        phase = np.random.uniform(0.0, 2.0 * np.pi)
+        wander = amp * np.sin(2.0 * np.pi * freq * t + phase)
+        
+        noisy[lead] = sig + emg + wander
+        
+    return noisy
+
+
 def limb_interchange_simulation(mode, signals_dict):
     """
     Simula misplacements periferici (Classi 1-7).

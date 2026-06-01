@@ -8,6 +8,7 @@ import copy
 import zipfile
 import io
 from tqdm import tqdm
+from data_pipeline import add_extra_noise
 
 def train_test_split(data, test_size=0.25, random_state=42):
     np.random.seed(random_state)
@@ -19,15 +20,15 @@ def train_test_split(data, test_size=0.25, random_state=42):
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from data.data_pipeline import (
     read_edf_data, all_leads_preprocessing, check_ecg_quality, 
-    check_window_quality, precordial_interchange_simulation
+    check_window_quality, limb_interchange_simulation, apply_electrode_gain
 )
 from utils.config import (
-    SAMPLES_PER_WINDOW, FS_NEW,
-    ALL_LEADS, PRECORDIAL_MAPPING, 
+    SAMPLES_PER_WINDOW, FS_NEW, FS_OLD,
+    ALL_LEADS, MAPPING_INV, ACTIVE_SYNTH_CLASSES, 
     QUALITY_CFG
 )
 
-PRECORDIAL_INDICES = list(range(6, 12))
+LIMB_INDICES = list(range(6))
 
 # Override stride: NO SOVRAPPOSIZIONE
 STRIDE_SAMPLES = int(FS_NEW * 2.0)
@@ -38,8 +39,8 @@ QUALITY_CFG_HOLTER = copy.deepcopy(QUALITY_CFG)
 # QUALITY_CFG_STANDARD è più rigorosa per gli ECG da 10s
 QUALITY_CFG_STANDARD = copy.deepcopy(QUALITY_CFG)
 QUALITY_CFG_STANDARD["baseline_max_uv"] = 500.0
-QUALITY_CFG_STANDARD["mad_noise_limb"] = 20.0
-QUALITY_CFG_STANDARD["mad_noise_prec"] = 25.0
+QUALITY_CFG_STANDARD["mad_noise_limb"] = 15.0  # PIÙ SEVERA (era 20.0) per eliminare artefatti
+QUALITY_CFG_STANDARD["mad_noise_prec"] = 20.0  # PIÙ SEVERA (era 25.0)
 QUALITY_CFG_STANDARD["min_valid_ratio"] = 0.70
 
 # Dizionario per memorizzare se un ID è Holter
@@ -68,13 +69,15 @@ def compute_good_window_mask_from_raw(sigs_array, cfg, min_valid_leads_per_windo
         mask_win[w_idx] = (lead_valid_flags.sum() >= min_valid_leads_per_window)
     return mask_win
 
-def robust_scale_ecg(sigs_array, eps=1e-8):
-    """Robust Scaler: mediana per-lead + IQR globale (identica al training limbs)."""
+def robust_scale_ecg(sigs_array, eps=1e-8, reference_leads=None):
     x = sigs_array.astype(np.float32)
     medians = np.median(x, axis=1, keepdims=True)
-    q75, q25 = np.percentile(x, [75, 25])
+    # Calcoliamo IQR solo sulle lead di riferimento (LIMB) per coerenza con il testset reale
+    ref = x[reference_leads, :] if reference_leads is not None else x
+    q75, q25 = np.percentile(ref, [75, 25])
     iqr_global = q75 - q25
-    scale_global = max(iqr_global / 1.34896, eps)
+    scale_global = iqr_global / 1.34896
+    scale_global = max(scale_global, eps)
     x_norm = (x - medians) / scale_global
     return x_norm, medians.squeeze(), scale_global
 
@@ -99,13 +102,18 @@ def _append_to_h5(dset_x, dset_y, windows, labels):
     dset_x[curr:curr + n] = windows
     dset_y[curr:curr + n] = labels
 
-def build_unlabelled_precordials_dataset(ids_list, h5_name, id_to_zip, max_windows_per_class=None):
+def build_unlabelled_limbs_dataset(ids_list, h5_name, id_to_zip, max_windows_per_class=None, add_gain=True):
     if os.path.exists(h5_name): os.remove(h5_name)
     h5_tmp = h5_name + ".tmp"
-    if os.path.exists(h5_tmp): os.remove(h5_tmp)
+    try:
+        if os.path.exists(h5_tmp): os.remove(h5_tmp)
+    except PermissionError:
+        import time; time.sleep(1)
+        if os.path.exists(h5_tmp): os.remove(h5_tmp)
 
-    all_labels = ['normale'] + list(PRECORDIAL_MAPPING.keys())
-    label_to_int = {lab: idx for idx, lab in enumerate(all_labels)}
+    all_labels = ['normale'] + list(ACTIVE_SYNTH_CLASSES)
+    all_mapping = ['normale'] + list(MAPPING_INV.keys())
+    label_to_int = {lab: idx for idx, lab in enumerate(all_mapping)}
     name = os.path.basename(h5_name)
 
     with h5py.File(h5_tmp, 'w') as f:
@@ -133,24 +141,29 @@ def build_unlabelled_precordials_dataset(ids_list, h5_name, id_to_zip, max_windo
                 if not ecg_data or not ecg_data["signals"]:
                     skipped += 1; continue
 
+                # APPLICAZIONE GAIN E RUMORE FISICO PRE-FILTRO
+                if add_gain:
+                    # Rumore base calibrato (1.1x) per match perfetto con dati reali
+                    ecg_data["signals"] = apply_electrode_gain(ecg_data["signals"], fs=FS_OLD, noise_multiplier=1.1)
+
                 sigs = all_leads_preprocessing(ecg_data["signals"])
                 sigs_array = np.array([sigs[l] for l in ALL_LEADS], dtype=np.float32)
 
-                # QUALITY CHECK DINAMICO SULLE PRECORDIALI
+                # QUALITY CHECK DINAMICO
                 is_holter = IS_HOLTER_DICT.get(ecg_id, False)
                 cfg = QUALITY_CFG_HOLTER if is_holter else QUALITY_CFG_STANDARD
                 cfg["stride_sec"] = 2.0 
 
-                quality_result = check_ecg_quality(sigs_array, cfg=cfg, lead_indices=PRECORDIAL_INDICES)
+                quality_result = check_ecg_quality(sigs_array, cfg=cfg, lead_indices=LIMB_INDICES)
                 if not quality_result['global_valid']:
                     skipped += 1; continue
 
-                win_mask = compute_good_window_mask_from_raw(sigs_array, cfg=cfg, min_valid_leads_per_window=5, lead_indices=PRECORDIAL_INDICES)
+                win_mask = compute_good_window_mask_from_raw(sigs_array, cfg=cfg, min_valid_leads_per_window=5, lead_indices=LIMB_INDICES)
                 if win_mask.size == 0 or not win_mask.any():
                     skipped += 1; continue
 
-                # ROBUST SCALE sui segnali originali (Normale)
-                sigs_norm, _, _ = robust_scale_ecg(sigs_array)
+                # ROBUST SCALE: IQR calcolato SOLO sulle 6 lead periferiche (coerenza con testset reale)
+                sigs_norm, _, _ = robust_scale_ecg(sigs_array, reference_leads=LIMB_INDICES)
                 sigs_norm_dict = {lead: sigs_norm[i] for i, lead in enumerate(ALL_LEADS)}
                 wins_all = create_windows(sigs_norm_dict, stride=STRIDE_SAMPLES)
                 
@@ -170,18 +183,44 @@ def build_unlabelled_precordials_dataset(ids_list, h5_name, id_to_zip, max_windo
                     _append_to_h5(dset_x, dset_y, wins_r_good[:n_to_add], labels_r)
                     class_counts['normale'] += n_to_add
 
-                # SIMULAZIONE INVERSIONI PRECORDIALI
-                for inv_name in PRECORDIAL_MAPPING.keys():
+                # SIMULAZIONE INVERSIONI CON TARGETED NOISE DIFFERENZIATO
+                for inv_name in ACTIVE_SYNTH_CLASSES:
                     n_to_add_inv = wins_r_good.shape[0]
                     if max_windows_per_class is not None:
                         rem_inv = max_windows_per_class - class_counts[inv_name]
                         n_to_add_inv = min(n_to_add_inv, rem_inv)
                         
                     if n_to_add_inv > 0:
-                        sim_sigs = precordial_interchange_simulation(PRECORDIAL_MAPPING[inv_name], sigs)
-                        sim_sigs_array = np.array([sim_sigs[l] for l in ALL_LEADS], dtype=np.float32)
+                        # 1. Applichiamo lo scambio sui segnali RAW
+                        raw_inv = limb_interchange_simulation(MAPPING_INV[inv_name], ecg_data["signals"])
                         
-                        sim_sigs_norm, _, _ = robust_scale_ecg(sim_sigs_array)
+                        # 2. Targeted Noise differenziato per classe
+                        # CALIBRATO SUI DATI REALI (KS test + analisi visiva)
+                        extra_mult = None
+                        if inv_name == 'ROT_ANTIORARIA':
+                            # Reale ROT_ANT: MAD ~0.10 con coda fino a 0.4
+                            # Range moderato per non over-noisare
+                            extra_mult = np.random.uniform(1.0, 2.5)
+                        elif inv_name in ['ROT_ORARIA']:
+                            extra_mult = np.random.uniform(1.2, 3.0)
+                        elif inv_name in ['RA-LL', 'LA-LL']:
+                            # Distribuzione bimodale osservata nei dati reali
+                            if np.random.random() < 0.5:
+                                extra_mult = np.random.uniform(1.0, 1.5)  # Basso
+                            else:
+                                extra_mult = np.random.uniform(2.0, 4.0)  # Alto
+                        
+                        if extra_mult:
+                            # Aggiungiamo rumore extra sui dati RAW e poi preprocessiamo
+                            raw_inv_noisy = add_extra_noise(raw_inv, multiplier=extra_mult, fs=FS_OLD)
+                            sim_sigs = all_leads_preprocessing(raw_inv_noisy)
+                        else:
+                            # Preprocessing standard per le classi senza extra noise (es. LA-RA)
+                            sim_sigs = all_leads_preprocessing(raw_inv)
+
+                        sim_sigs_array = np.array([sim_sigs[l] for l in ALL_LEADS], dtype=np.float32)
+                        # IQR calcolato SOLO sulle 6 lead periferiche
+                        sim_sigs_norm, _, _ = robust_scale_ecg(sim_sigs_array, reference_leads=LIMB_INDICES)
                         sim_sigs_norm_dict = {lead: sim_sigs_norm[i] for i, lead in enumerate(ALL_LEADS)}
                         
                         wins_s = create_windows(sim_sigs_norm_dict, stride=STRIDE_SAMPLES)
@@ -228,34 +267,24 @@ def get_clean_ecg_ids(db_path, max_ecgs=None):
     rejection_codes = {'BTWG01', 'BTWG02', 'BTWG03', 'BTWG04', 'BTWG05', 'BTWC1109', 'BTWC1110'}
     
     clean_ids = []
-
     for r in rows:
         id_ = r[0]
         report_str = r[1]
         text_str = (r[2] or "").lower()
-        
-        if any(kw in text_str for kw in text_bad_keywords):
-            continue
-            
+        if any(kw in text_str for kw in text_bad_keywords): continue
         try:
             data = json.loads(report_str)
             codified = data.get('codified', [])
             codes = [c['value'] for c in codified if c.get('type') == 'code']
-            
-            if any(c in rejection_codes for c in codes):
-                continue
-                
+            if any(c in rejection_codes for c in codes): continue
             is_holter = 'BTWSCQQ43' in codes
             IS_HOLTER_DICT[id_] = is_holter
-            
             clean_ids.append(id_)
-        except Exception:
-            continue
+        except Exception: continue
 
     np.random.seed(42)
     np.random.shuffle(clean_ids)
-    if max_ecgs and len(clean_ids) > max_ecgs:
-        clean_ids = clean_ids[:max_ecgs]
+    if max_ecgs and len(clean_ids) > max_ecgs: clean_ids = clean_ids[:max_ecgs]
     return clean_ids
 
 def build_zip_index(dataset_dir):
@@ -268,33 +297,27 @@ def build_zip_index(dataset_dir):
                 if edf_name.endswith('.edf'):
                     ecg_id = edf_name.replace('.edf', '')
                     id_to_zip[ecg_id] = zip_path
-    print(f"Indicizzati {len(id_to_zip)} ECG nei file ZIP.")
     return id_to_zip
 
 if __name__ == "__main__":
     db_path = os.path.join(os.path.dirname(__file__), '..', '..', 'datasets', 'dataset', 'records.db')
-    out_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'datasets')
+    out_base = os.path.join(os.path.dirname(__file__), '..', '..', 'datasets')
+    out_dir = os.path.join(out_base, "unlabelled_simulated_gain")
     dataset_dir = os.path.join(os.path.dirname(__file__), '..', '..', 'datasets', 'dataset', 'DATASET')
     
     id_to_zip = build_zip_index(dataset_dir)
-    
-    print("Estrazione ID puliti (no inversioni note, no rejected)...")
     all_clean_ids_db = get_clean_ecg_ids(db_path, max_ecgs=20000)
     all_clean_ids = [cid for cid in all_clean_ids_db if str(cid) in id_to_zip]
-    print(f"Trovati {len(all_clean_ids)} ECG utilizzabili e presenti nei file ZIP.")
-
+    
     train_ids, vt_ids = train_test_split(all_clean_ids, test_size=0.20, random_state=42)
     val_ids, test_ids = train_test_split(vt_ids, test_size=0.50, random_state=42)
 
-    print(f"Dataset Split:")
-    print(f"  Train: {len(train_ids)} ECG")
-    print(f"  Val:   {len(val_ids)} ECG")
-    print(f"  Test:  {len(test_ids)} ECG")
-
     os.makedirs(out_dir, exist_ok=True)
     
-    print("\n=== PRECORDIALS UNLABELLED ===")
-    build_unlabelled_precordials_dataset(test_ids,  os.path.join(out_dir, "unlabelled_z_median_precordials_test.h5"),  id_to_zip, max_windows_per_class=None)
-    build_unlabelled_precordials_dataset(val_ids,   os.path.join(out_dir, "unlabelled_z_median_precordials_val.h5"),   id_to_zip, max_windows_per_class=None)
-    build_unlabelled_precordials_dataset(train_ids, os.path.join(out_dir, "unlabelled_z_median_precordials_train.h5"), id_to_zip, max_windows_per_class=None)
+    print(f"\n=== LIMBS UNLABELLED GAIN (SQA 15uV) ===")
+    print(f"Output directory: {out_dir}")
+    
+    build_unlabelled_limbs_dataset(test_ids,  os.path.join(out_dir, "unlabelled_final_noise_limbs_test.h5"),  id_to_zip, max_windows_per_class=None, add_gain=True)
+    build_unlabelled_limbs_dataset(val_ids,   os.path.join(out_dir, "unlabelled_final_noise_limbs_val.h5"),   id_to_zip, max_windows_per_class=None, add_gain=True)
+    build_unlabelled_limbs_dataset(train_ids, os.path.join(out_dir, "unlabelled_final_noise_limbs_train.h5"), id_to_zip, max_windows_per_class=None, add_gain=True)
     print("\nFatto.")

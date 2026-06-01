@@ -1,0 +1,27 @@
+# 1. IGNORA TUTTO DI DEFAULT
+*
+
+# 2. PERMETTI DI ENTRARE NELLE CARTELLE
+!*/
+
+# 3. BLOCCA LE CARTELLE CON CODICE NON TUO (Librerie, Cache, Ambienti)
+__pycache__/
+venv/
+env/
+.venv/
+node_modules/
+.vscode/
+.idea/
+
+# 4. SALVA LE ESTENSIONI GENERICHE OVUNQUE (Tesi, Immagini, Report)
+!*.png
+!*.pdf
+!*.md
+
+# 5. SALVA I FILE .py SOLO NELLE TUE CARTELLE
+# Usa questa sintassi per sbloccare i py solo dentro src e le sue sottocartelle
+!src/**/*.py
+!*.py # Sblocca i .py nella cartella principale (se hai un main.py fuori da src)
+
+# 6. SALVA QUESTO FILE
+!.gitignore

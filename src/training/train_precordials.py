@@ -139,9 +139,9 @@ if __name__ == '__main__':
         except RuntimeError as e:
             print(f"⚠️ Errore configurazione GPU: {e}")
 
-    dataset_path_test  = "../../datasets/unlabelled_precordials_test.h5"
-    dataset_path_val   = "../../datasets/unlabelled_precordials_val.h5"
-    dataset_path_train = "../../datasets/unlabelled_precordials_train.h5"
+    dataset_path_test  = "../../datasets/unlabelled_z_median_precordials_test.h5"
+    dataset_path_val   = "../../datasets/unlabelled_z_median_precordials_val.h5"
+    dataset_path_train = "../../datasets/unlabelled_z_median_precordials_train.h5"
     
     with h5py.File(dataset_path_test, 'r') as f:
         # Prende solo gli ultimi 6 canali
@@ -159,7 +159,7 @@ if __name__ == '__main__':
     EP = 20
     LR = 1e-3 
     BS = 256
-    save_path = 'best_model_precordials.weights.h5'
+    save_path = 'best_model_unlabelled_z_median_precordials.weights.h5'
     base_dir = os.path.dirname(os.path.abspath(__file__))
 
     print(f"--- CONFIGURAZIONE RILEVATA ---")
@@ -176,6 +176,6 @@ if __name__ == '__main__':
         model, train_gen, val_gen, 
         [x_test, x_val_eval], [y_test, y_val_eval], 
         save_path, EP, LR, BS, 
-        os.path.join(base_dir, "precordials_cm_test.png"), 
-        os.path.join(base_dir, "precordials_cm_val.png")
+        os.path.join(base_dir, "unlabelled_z_median_precordials_cm_test.png"), 
+        os.path.join(base_dir, "unlabelled_z_median_precordials_cm_val.png")
     )
