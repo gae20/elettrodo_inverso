@@ -1,5 +1,3 @@
-import os
-import sys
 import sqlite3
 import json
 import numpy as np

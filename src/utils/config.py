@@ -115,3 +115,33 @@ QUALITY_CFG = {
     "noisy_ratio_thr": 0.70,
     "min_valid_leads": 10      # usato solo come base per il riscalamento in check_ecg_quality
 }
+
+def robust_scale_ecg(sigs_array, eps=1e-8, reference_leads=None):
+    """
+    Applica una normalizzazione robusta (z-score basato su mediano e IQR) ai segnali ECG.
+    Questa funzione è standardizzata per garantire consistenza tra dati reali e sintetici.
+    
+    Args:
+        sigs_array: Array numpy con shape (N_LEADS, N_SAMPLES).
+        eps: Valore epsilon per evitare divisioni per zero.
+        reference_leads: (Opzionale) Lista di indici di derivazioni su cui calcolare l'IQR globalmente.
+                         Se None, l'IQR viene calcolato su tutte le derivazioni in sigs_array.
+    Returns:
+        Se reference_leads è definito, ritorna (x_norm, medians, scale_global).
+        Altrimenti, ritorna solo x_norm.
+    """
+    x = sigs_array.astype(np.float32)
+    medians = np.median(x, axis=1, keepdims=True)
+    
+    ref = x[reference_leads, :] if reference_leads is not None else x
+    q75, q25 = np.percentile(ref, [75, 25])
+    iqr_global = q75 - q25
+    scale_global = iqr_global / 1.34896
+    scale_global = max(scale_global, eps)
+    
+    x_norm = (x - medians) / scale_global
+    
+    if reference_leads is not None:
+        return x_norm, medians.squeeze(), scale_global
+    return x_norm
+

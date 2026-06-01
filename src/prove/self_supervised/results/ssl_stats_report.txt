@@ -1,0 +1,19 @@
+============================================================
+REPORT PSEUDO-LABELLING
+============================================================
+Candidati totali:          393
+Scartati (SQA / errore):   159
+Scartati (no finestre):    0
+Scartati (conf < 95%):   61
+Accettati (conf >= 95%): 173
+
+Distribuzione classi pseudo-labeled:
+  normale        :   16  (9.2%)
+  LA-RA          :  142  (82.1%)
+  RA-LL          :   11  (6.4%)
+  LA-LL          :    3  (1.7%)
+  ROT_ORA        :    1  (0.6%)
+  ROT_ANT        :    0  (0.0%)
+
+Output: c:\Users\cancr\OneDrive\Desktop\tesi\elettrodo_inverso\src\prove\self_supervised\results\pseudolabels.json
+============================================================
