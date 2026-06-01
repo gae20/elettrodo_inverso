@@ -15,8 +15,24 @@ from utils.config import (
     ACTIVE_SYNTH_CLASSES, QUALITY_CFG
 )
 
+<<<<<<< Updated upstream
 # Cartella locale dove sono i file EDF estratti
 LOCAL_DATASETS_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'datasets', 'dataset')
+=======
+# --- S3 CONFIGURATION ---
+from dotenv import load_dotenv
+
+# Carica le credenziali dal file .env nella directory principale
+env_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
+load_dotenv(dotenv_path=env_path)
+
+BUCKET = "btw-ml-data"
+BASE_PATH = "polito-thesis/"
+ECG_PATH = BASE_PATH + "record%s.edf"
+
+# Cartella locale dove sono i file EDF scaricati dalla console S3
+LOCAL_DATASETS_DIR = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'datasets', 'dataset')
+>>>>>>> Stashed changes
 
 def _parse_edf_file(filepath):
     """
@@ -254,6 +270,119 @@ def precordial_interchange_simulation(mode, signals_dict):
         
     lead_names = list(signals_dict.keys())
     return {name: transformed[i] for i, name in enumerate(lead_names)}
+
+# --- NOISE AUGMENTATION ---
+
+def _apply_electrode_noise(signals_dict, noise_func, **kwargs):
+    """
+    Applica una funzione di generazione rumore a livello di elettrodo fisico
+    per garantire la consistenza fisica (legge di Einthoven).
+    """
+    n_samples = len(next(iter(signals_dict.values())))
+    
+    # Genera rumore indipendente per gli elettrodi fisici
+    # RL è il ground, lo consideriamo 0 (o il riferimento comune che si cancella).
+    n_RA = noise_func(n_samples, **kwargs)
+    n_LA = noise_func(n_samples, **kwargs)
+    n_LL = noise_func(n_samples, **kwargs)
+    n_V1 = noise_func(n_samples, **kwargs)
+    n_V2 = noise_func(n_samples, **kwargs)
+    n_V3 = noise_func(n_samples, **kwargs)
+    n_V4 = noise_func(n_samples, **kwargs)
+    n_V5 = noise_func(n_samples, **kwargs)
+    n_V6 = noise_func(n_samples, **kwargs)
+    
+    # Deriva il rumore per ciascuna derivazione
+    # WCT (Wilson Central Terminal)
+    n_WCT = (n_RA + n_LA + n_LL) / 3.0
+    
+    noise_leads = {
+        'I': n_LA - n_RA,
+        'II': n_LL - n_RA,
+        'III': n_LL - n_LA,
+        'aVr': n_RA - (n_LA + n_LL) / 2.0,
+        'aVl': n_LA - (n_RA + n_LL) / 2.0,
+        'aVf': n_LL - (n_RA + n_LA) / 2.0,
+        'V1': n_V1 - n_WCT,
+        'V2': n_V2 - n_WCT,
+        'V3': n_V3 - n_WCT,
+        'V4': n_V4 - n_WCT,
+        'V5': n_V5 - n_WCT,
+        'V6': n_V6 - n_WCT,
+    }
+    
+    noisy_signals = {}
+    for lead, sig in signals_dict.items():
+        if lead in noise_leads:
+            noisy_signals[lead] = (np.array(sig, dtype=np.float32) + noise_leads[lead]).astype(np.float32)
+        else:
+            noisy_signals[lead] = np.array(sig, dtype=np.float32)
+            
+    return noisy_signals
+
+def apply_electrode_gain(signals_dict, fs=FS_OLD, noise_multiplier=1.1):
+    """
+    Applica un gain (rumore fisico simulato) ai segnali crudi, rispettando
+    la consistenza tra elettrodi (Einthoven).
+    """
+    global_std = np.mean([np.std(sig) for sig in signals_dict.values()])
+    def _white_noise(n):
+        # Usiamo il factor diviso per sqrt(2) approssimativamente,
+        # perche' noise_I = n_LA - n_RA (varianza si somma)
+        # std(Noise_I) = sqrt(2) * std(n_LA)
+        return np.random.normal(0, (global_std * 0.05 * noise_multiplier) / 1.414, size=n)
+        
+    return _apply_electrode_noise(signals_dict, _white_noise)
+
+def apply_random_scaling(signals_dict, min_scale=0.5, max_scale=1.5):
+    """
+    Moltiplica l'ampiezza dell'intero ECG per un fattore casuale.
+    Aiuta la rete a diventare invariante all'ampiezza assoluta (risolvendo il drop di varianza).
+    """
+    scale = np.random.uniform(min_scale, max_scale)
+    return {lead: (np.array(sig, dtype=np.float32) * scale) for lead, sig in signals_dict.items()}
+
+def add_baseline_wander(signals_dict, fs=FS_OLD, intensity=300.0):
+    """
+    Aggiunge una lenta fluttuazione fisiologica (es. respiro).
+    Utilizza rumore bianco filtrato passa-basso per renderlo stocastico
+    e rispetta la geometria di Einthoven tra le derivazioni.
+    """
+    def _stochastic_wander(n):
+        # Compensazione di ~4.0 empirica per mantenere std~200 come in precedenza
+        white = np.random.normal(0, intensity * 4.0 / 1.414, size=n)
+        # Lowpass a 0.5Hz per variazioni lente (respiro)
+        b, a = signal.butter(2, 0.5, btype='low', fs=fs)
+        return signal.filtfilt(b, a, white)
+        
+    return _apply_electrode_noise(signals_dict, _stochastic_wander)
+
+def add_extra_noise(signals_dict, multiplier=1.5, fs=FS_OLD):
+    """
+    Aggiunge rumore extra differenziato: EMG (alta frequenza) e artefatti
+    da movimento (salti a gradino smussati) con consistenza di Einthoven.
+    """
+    global_std = np.mean([np.std(sig) for sig in signals_dict.values()])
+    
+    def _complex_noise(n):
+        # 1. Rumore EMG (burst ad alta frequenza)
+        emg_white = np.random.normal(0, (global_std * 0.1 * multiplier) / 1.414, size=n)
+        b2, a2 = signal.butter(2, [20, min(120, fs/2.5)], btype='bandpass', fs=fs)
+        emg_noise = signal.filtfilt(b2, a2, emg_white)
+        
+        # 2. Artefatti da movimento (salti a gradino) - 20% di probabilita'
+        motion = np.zeros(n)
+        if np.random.rand() < 0.20:
+            jump_pos = np.random.randint(int(fs*0.5), int(n - fs*0.5))
+            jump_amp = np.random.choice([-1, 1]) * np.random.uniform(global_std*0.5, global_std*2.0)
+            motion[jump_pos:] = jump_amp
+            # Smussamento del gradino
+            b3, a3 = signal.butter(1, 2.0, btype='low', fs=fs)
+            motion = signal.filtfilt(b3, a3, motion)
+            
+        return emg_noise + motion
+
+    return _apply_electrode_noise(signals_dict, _complex_noise)
 
 # --- SIGNAL QUALITY ASSESSMENT (SQA) ---
 
