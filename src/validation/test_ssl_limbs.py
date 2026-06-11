@@ -7,8 +7,9 @@ Supporta due modalità di valutazione via riga di comando:
   2. Patient-level: valuta sui pazienti reali di dataset_small con upsampling per bilanciamento.
 
 Output:
-  - Classification report (Precision / Recall / F1 per classe)
+  - Classification report (Precision / Recall / F1 / Specificity per classe)
   - Accuracy, AUROC, AuPRC
+  - Analisi Binaria (Normale vs Anormale)
   - Confusion matrix salvate in results/ssl_weights/
   - Confronto numerico tra SSL e modello originale
 """
@@ -64,6 +65,63 @@ os.makedirs(OUT_DIR, exist_ok=True)
 
 
 # ===========================================================================
+# CALCOLO METRICHE CUSTOM (Multiclasse e Binario)
+# ===========================================================================
+
+def cal_metrics(confusion_matrix):
+    n_classes = confusion_matrix.shape[0]
+    metrics_result = []
+    for i in range(n_classes):
+        ALL = np.sum(confusion_matrix)
+        TP = confusion_matrix[i, i]
+        FP = np.sum(confusion_matrix[:, i]) - TP
+        FN = np.sum(confusion_matrix[i, :]) - TP
+        TN = ALL - TP - FP - FN
+        
+        accuracy = (TP + TN) / ALL if ALL > 0 else 0
+        precision = TP/(TP+FP) if (TP+FP) > 0 else 0
+        recall = TP/(TP+FN) if (TP+FN) > 0 else 0
+        f1 = 2*precision*recall/(precision+recall) if (precision+recall) > 0 else 0
+        specificity = TN/(TN+FP) if (TN+FP) > 0 else 0
+        metrics_result.append([accuracy, precision, recall, specificity, f1])
+    return metrics_result
+
+def cal_binary_metrics(y_true, y_pred):
+    y_true_bin = np.where(y_true == 0, 0, 1)
+    y_pred_bin = np.where(y_pred == 0, 0, 1)
+    
+    C_bin = confusion_matrix(y_true_bin, y_pred_bin, labels=[0, 1])
+    # Gestione sicura per evitare unpacking errors se mancano classi
+    if C_bin.size == 4:
+        TN, FP, FN, TP = C_bin.ravel()
+    else:
+        TN, FP, FN, TP = 0, 0, 0, 0 # Fallback 
+        
+    acc = (TP + TN) / (TN + FP + FN + TP) if (TN + FP + FN + TP) > 0 else 0
+    prec = TP / (TP + FP) if (TP + FP) > 0 else 0
+    rec = TP / (TP + FN) if (TP + FN) > 0 else 0
+    spec = TN / (TN + FP) if (TN + FP) > 0 else 0
+    f1 = 2 * prec * rec / (prec + rec) if (prec + rec) > 0 else 0
+    
+    return C_bin, acc, prec, rec, spec, f1
+
+def print_binary_report(y_true, y_pred, title=""):
+    C_bin, acc, prec, rec, spec, f1 = cal_binary_metrics(y_true, y_pred)
+    print(f"\n[ANALISI BINARIA: NORMALE vs ANORMALE - {title}]")
+    print(f"Matrice di Confusione Binaria:\n {C_bin}")
+    if C_bin.size == 4:
+        print(f" -> Veri Normali (TN): {C_bin[0,0]:>6} | Falsi Anormali (FP): {C_bin[0,1]:>6}")
+        print(f" -> Falsi Normali (FN): {C_bin[1,0]:>6} | Veri Anormali (TP): {C_bin[1,1]:>6}")
+    print("-" * 55)
+    print(f"Accuratezza Binaria:     {acc:.4f}")
+    print(f"Specificità (Sani):      {spec:.4f} (Capacità di riconoscere i VERI NORMALI)")
+    print(f"Sensibilità/Rec (Malati):{rec:.4f} (Capacità di intercettare le ANOMALIE)")
+    print(f"Precisione Binaria:      {prec:.4f}")
+    print(f"F1-Score Binario:        {f1:.4f}")
+    print("-" * 55)
+
+
+# ===========================================================================
 # MODALITÀ 1: Valutazione a Finestra (Originale)
 # ===========================================================================
 
@@ -76,7 +134,6 @@ def load_test_data_window(path):
         y = y_all[valid_idx]
     print(f"  Campioni test: {len(y)}  |  Classi: {np.unique(y)}")
     return x, y
-
 
 def evaluate_window(model, x, y, cm_path=None, model_name=""):
     y_probs = model.predict(x, batch_size=64, verbose=0)
@@ -187,38 +244,24 @@ def extract_patient_windows(patient_id, edf_dir, cfg=QUALITY_CFG):
 
     return np.transpose(good_windows, (0, 2, 1))
 
-def predict_model_patients(model, valid_patients, patient_windows_dict):
-    patients_by_class = {c: [] for c in range(6)}
+def predict_model_patients_simple(model, valid_patients, patient_windows_dict):
+    y_true_list = []
+    y_probs_list = []
+    
     for pat in valid_patients:
         pid = pat['id']
         c = pat['true_class']
         wins = patient_windows_dict[pid]
+        
         y_probs = model.predict(wins, batch_size=64, verbose=0)
-        avg_prob = np.mean(y_probs, axis=0)
-        patients_by_class[c].append(avg_prob)
-    return patients_by_class
+        avg_prob = np.mean(y_probs, axis=0) 
+        
+        y_true_list.append(c)
+        y_probs_list.append(avg_prob)
+        
+    return np.array(y_true_list), np.array(y_probs_list)
 
-def balance_and_prepare(patients_by_class, seed=42):
-    np.random.seed(seed)
-    max_patients = max(len(patients_by_class[c]) for c in range(6))
-    print(f"  Target di pazienti per classe (upsample): {max_patients}")
-    
-    balanced_probs = []
-    balanced_trues = []
-    
-    for c in range(6):
-        pats = patients_by_class[c]
-        n_pats = len(pats)
-        if n_pats == 0:
-            continue
-        chosen_indices = np.random.choice(n_pats, size=max_patients, replace=True)
-        for idx in chosen_indices:
-            balanced_probs.append(pats[idx])
-            balanced_trues.append(c)
-            
-    return np.array(balanced_trues), np.array(balanced_probs)
-
-def evaluate_balanced_patient(y_true, y_probs, cm_path=None, model_name=""):
+def evaluate_patient_real(y_true, y_probs, cm_path=None, model_name=""):
     y_pred = np.argmax(y_probs, axis=1)
     acc = np.mean(y_pred == y_true)
     C = confusion_matrix(y_true, y_pred, labels=range(6))
@@ -233,15 +276,19 @@ def evaluate_balanced_patient(y_true, y_probs, cm_path=None, model_name=""):
         ax.set_xticks(range(6)); ax.set_xticklabels(CLASS_NAMES, rotation=45, ha='left')
         ax.set_yticks(range(6)); ax.set_yticklabels(CLASS_NAMES)
         ax.set_xlabel('Predicted'); ax.set_ylabel('True')
-        ax.set_title(f'Confusion Matrix (Paziente Bilanciato) — {model_name}', pad=20)
+        ax.set_title(f'Confusion Matrix (Pazienti Reali) — {model_name}', pad=20)
         plt.tight_layout()
         plt.savefig(cm_path, bbox_inches='tight', dpi=200)
         plt.close()
         print(f"  Matrice di confusione salvata in: {cm_path}")
         
-    y_oh = to_categorical(y_true, num_classes=6)
-    auroc = roc_auc_score(y_oh, y_probs, multi_class='ovr', average='macro')
-    auprc = average_precision_score(y_oh, y_probs, average='macro')
+    try:
+        y_oh = to_categorical(y_true, num_classes=6)
+        auroc = roc_auc_score(y_oh, y_probs, multi_class='ovr', average='macro')
+        auprc = average_precision_score(y_oh, y_probs, average='macro')
+    except ValueError as e:
+        print(f"  [Avviso] Metriche AUC non calcolabili per {model_name} (probabili classi vuote nel test set).")
+        auroc, auprc = 0.0, 0.0
     
     return acc, auroc, auprc, C, y_probs, y_pred
 
@@ -251,14 +298,29 @@ def evaluate_balanced_patient(y_true, y_probs, cm_path=None, model_name=""):
 # ===========================================================================
 
 def print_report(y, y_pred, acc, auroc, auprc, C, model_name):
-    print(f"\n{'='*55}")
+    print(f"\n{'='*75}")
     print(f"  MODELLO: {model_name}")
-    print(f"{'='*55}")
-    print(classification_report(y, y_pred, target_names=CLASS_NAMES, digits=3))
+    print(f"{'='*75}")
+    
+    # 1. Tabella Multiclasse Custom
+    metrics = cal_metrics(C)
+    print(f"\n[RISULTATI MULTICLASSE]")
     print(f"  Accuratezza Totale : {acc:.4f}  ({acc*100:.2f}%)")
     print(f"  AUROC (Macro)      : {auroc:.4f}")
     print(f"  AuPRC (Macro)      : {auprc:.4f}")
-    print(f"\n  [ANALISI ERRORI]")
+    print("-" * 75)
+    print(f"{'Classe':<14} | {'Acc.':<8} | {'Prec.':<8} | {'Rec.':<8} | {'Spec.':<8} | {'F1':<8}")
+    print("-" * 75)
+    for i in range(len(metrics)):
+        a, p, r, s, f1 = metrics[i]
+        print(f"{CLASS_NAMES[i]:<14} | {a:<8.4f} | {p:<8.4f} | {r:<8.4f} | {s:<8.4f} | {f1:<8.4f}")
+    print("-" * 75)
+    
+    # 2. Tabella Binaria Custom
+    print_binary_report(y, y_pred, title=model_name)
+    
+    # 3. Analisi Errori
+    print(f"\n  [ANALISI ERRORI DETTAGLIATA]")
     for i, name in enumerate(CLASS_NAMES):
         tp     = C[i, i]
         total  = C[i].sum()
@@ -266,16 +328,16 @@ def print_report(y, y_pred, acc, auroc, auprc, C, model_name):
         errors.sort(key=lambda x: -x[1])
         if errors:
             err_str = ', '.join([f"{n}={v}" for n, v in errors])
-            print(f"    {name:<12} (n={total:>4}): TP={tp:>4} | confuso con: {err_str}")
+            print(f"    {name:<14} (n={total:>4}): TP={tp:>4} | confuso con: {err_str}")
         else:
-            print(f"    {name:<12} (n={total:>4}): TP={tp:>4} | nessun errore")
+            print(f"    {name:<14} (n={total:>4}): TP={tp:>4} | nessun errore ✅")
 
 
 def print_comparison(metrics_orig, metrics_ssl, mode="window"):
     acc_o, auroc_o, auprc_o = metrics_orig
     acc_s, auroc_s, auprc_s = metrics_ssl
 
-    print(f"\n{'='*55}")
+    print(f"\n{'='*65}")
     if mode == "window":
         mode_str = "A livello di Finestra (Simulato)"
     elif mode == "patient_simulated":
@@ -283,9 +345,9 @@ def print_comparison(metrics_orig, metrics_ssl, mode="window"):
     else:
         mode_str = "A livello di Paziente Bilanciato (Reale)"
     print(f"  CONFRONTO ORIGINALE vs SSL ({mode_str})")
-    print(f"{'='*55}")
+    print(f"{'='*65}")
     print(f"  {'Metrica':<20} {'Originale':>10} {'SSL':>10} {'Delta':>10}")
-    print(f"  {'-'*50}")
+    print(f"  {'-'*55}")
 
     def delta_str(new, old):
         d = new - old
@@ -295,7 +357,7 @@ def print_comparison(metrics_orig, metrics_ssl, mode="window"):
     print(f"  {'Accuracy':<20} {acc_o*100:>9.2f}% {acc_s*100:>9.2f}% {delta_str(acc_s, acc_o):>10}")
     print(f"  {'AUROC (macro)':<20} {auroc_o:>10.4f} {auroc_s:>10.4f} {delta_str(auroc_s, auroc_o):>10}")
     print(f"  {'AuPRC (macro)':<20} {auprc_o:>10.4f} {auprc_s:>10.4f} {delta_str(auprc_s, auprc_o):>10}")
-    print(f"{'='*55}")
+    print(f"{'='*65}")
 
 
 # ===========================================================================
@@ -312,7 +374,6 @@ def load_test_data_patient_simulated(path):
         patient_ids = f['patient_ids'][valid_idx]
     print(f"  Campioni test simulati: {len(y)}  |  Pazienti unici: {len(np.unique(patient_ids))}")
     return x, y, patient_ids
-
 
 def evaluate_patient_simulated(model, x, y, patient_ids, cm_path=None, model_name=""):
     y_probs = model.predict(x, batch_size=64, verbose=0)
@@ -381,9 +442,9 @@ if __name__ == '__main__':
     output_dims = 6
 
     if args.mode == "window":
-        print("=" * 55)
+        print("=" * 65)
         print("VALUTAZIONE SSL — Test Set Simulato (Finestre)")
-        print("=" * 55)
+        print("=" * 65)
 
         print(f"\nCaricamento test set da: {DATASET_TEST_WINDOW}")
         x_test, y_test = load_test_data_window(DATASET_TEST_WINDOW)
@@ -462,9 +523,7 @@ if __name__ == '__main__':
 
         # 1. Ricerca CSV e cartella EDF
         csv_paths = [
-            os.path.join(THESIS_DIR, 'datasets', 'dataset', 'dataset_small', 'thesis-sample-corrected.csv'),
             os.path.join(THESIS_DIR, 'datasets', 'dataset', 'dataset_small', 'thesis-sample.csv'),
-            os.path.join(THESIS_DIR, 'datasets', 'dataset_small', 'thesis-sample-corrected.csv'),
             os.path.join(THESIS_DIR, 'datasets', 'dataset_small', 'thesis-sample.csv'),
         ]
         csv_path = None
@@ -537,14 +596,13 @@ if __name__ == '__main__':
         model_orig = build_model(input_shape, output_dims)
         model_orig.load_weights(WEIGHTS_ORIG)
         
-        pats_by_class_orig = predict_model_patients(model_orig, valid_patients, patient_windows_dict)
-        y_true_bal_o, y_probs_bal_o = balance_and_prepare(pats_by_class_orig, seed=42)
+        y_true_o, y_probs_o = predict_model_patients_simple(model_orig, valid_patients, patient_windows_dict)
         
         cm_path_orig = os.path.join(OUT_DIR, 'ssl_cm_original_patient.png')
-        acc_o, auroc_o, auprc_o, C_o, _, y_pred_o = evaluate_balanced_patient(
-            y_true_bal_o, y_probs_bal_o, cm_path=cm_path_orig, model_name="Originale"
+        acc_o, auroc_o, auprc_o, C_o, _, y_pred_o = evaluate_patient_real(
+            y_true_o, y_probs_o, cm_path=cm_path_orig, model_name="Originale"
         )
-        print_report(y_true_bal_o, y_pred_o, acc_o, auroc_o, auprc_o, C_o, "Originale")
+        print_report(y_true_o, y_pred_o, acc_o, auroc_o, auprc_o, C_o, "Originale")
 
         # 5. Modello SSL
         print(f"\n[2/2] Predizione con modello SSL: {WEIGHTS_SSL}")
@@ -555,14 +613,13 @@ if __name__ == '__main__':
         model_ssl = build_model(input_shape, output_dims)
         model_ssl.load_weights(WEIGHTS_SSL)
         
-        pats_by_class_ssl = predict_model_patients(model_ssl, valid_patients, patient_windows_dict)
-        y_true_bal_s, y_probs_bal_s = balance_and_prepare(pats_by_class_ssl, seed=42)
+        y_true_s, y_probs_s = predict_model_patients_simple(model_ssl, valid_patients, patient_windows_dict)
         
         cm_path_ssl = os.path.join(OUT_DIR, 'ssl_cm_realtest_patient.png')
-        acc_s, auroc_s, auprc_s, C_s, _, y_pred_s = evaluate_balanced_patient(
-            y_true_bal_s, y_probs_bal_s, cm_path=cm_path_ssl, model_name="SSL"
+        acc_s, auroc_s, auprc_s, C_s, _, y_pred_s = evaluate_patient_real(
+            y_true_s, y_probs_s, cm_path=cm_path_ssl, model_name="SSL"
         )
-        print_report(y_true_bal_s, y_pred_s, acc_s, auroc_s, auprc_s, C_s, "SSL")
+        print_report(y_true_s, y_pred_s, acc_s, auroc_s, auprc_s, C_s, "SSL")
 
         # 6. Confronto
         print_comparison(

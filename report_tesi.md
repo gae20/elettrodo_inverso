@@ -1,5 +1,7 @@
 # Rilevamento Automatico di Inversioni degli Elettrodi ECG mediante Deep Learning
 
+###COSE DA FARE: self supervised sulle precordiali, aggiustare il codice, rifare i risultati ei graficvi
+
 ## 1. Introduzione e Obiettivo
 
 L'obiettivo del progetto è sviluppare un sistema di rilevamento automatico delle inversioni degli elettrodi periferici in registrazioni ECG a 12 derivazioni. Il sistema utilizza una rete neurale convoluzionale (LDenseNet) addestrata su dati *sintetici* (inversioni simulate matematicamente a partire da ECG reali normali) e successivamente raffinata tramite *fine-tuning* su un piccolo dataset di ECG reali con inversioni cliniche confermate da un cardiologo.
@@ -411,54 +413,10 @@ Il modello viene addestrato da zero sul dataset sintetico:
 
 Il training utilizza un generatore HDF5 (`H5DataGenerator`) che legge i dati sequenzialmente dal file già shufflato su disco, evitando di caricare l'intero dataset in RAM.
 
-### 4.2 Fine-Tuning Mirato con Class Weights (resume_train_limbs.py)
-
-Sebbene il modello addestrato sui dati sintetici dimostri eccellenti capacità di generalizzazione, per colmare le residue confusioni asimmetriche (in particolare verso la classe `ROT_ANT` e `RA-LL`) è stata implementata una fase di **fine-tuning controllata**. 
-
-A differenza del training tradizionale su dati reali etichettati (che causerebbe rapido overfitting data la scarsità dei campioni ospedalieri bilanciati), il fine-tuning viene condotto **sul medesimo dataset sintetico aumentato**, ma con una configurazione iper-parametrica progettata per forzare il classificatore a risolvere le ambiguità:
-
-**Protocollo di Fine-Tuning**:
-1. **Partial Unfreezing (Sblocco parziale)**: Viene scongelato solo il classificatore denso finale. I layer convoluzionali precedenti, che hanno già appreso ad estrarre correttamente la morfologia di base del complesso QRS, vengono mantenuti congelati per non distruggere le feature robuste già acquisite.
-2. **Learning Rate Ultra-Basso**: Il learning rate (LR) viene abbassato a **$10^{-5}$** (un centesimo rispetto al training originale) e mantenuto costante per un limite ridotto di **10 epoche** (con Early Stopping). Questo garantisce un aggiustamento micrometrico dei confini decisionali senza sbalzi violenti dei pesi.
-3. **Pesi Asimmetrici (Class Weights)**: Per compensare in modo mirato le confusioni specifiche osservate in fase di test, vengono applicate penalità asimmetriche alla Loss (Categorical Cross-Entropy). Il modello è forzato matematicamente a prestare maggiore "attenzione" alle inversioni più difficili da distinguere:
-   - *Classe 0 (Normale)*: $1.0$
-   - *Classe 1 (LA-RA)*: $1.0$
-   - *Classe 2 (RA-LL)*: $1.5$
-   - *Classe 3 (LA-LL)*: $1.0$
-   - *Classe 4 (ROT_ORA)*: $1.5$
-   - *Classe 5 (ROT_ANT)*: $1.8$ (Penalità massima)
-
-L'intersezione tra pesi asimmetrici mirati e il decongelamento esclusivo del layer decisionale garantisce un riallineamento ottimale del Recall per le rotazioni critiche, prevenendo del tutto il decadimento delle prestazioni sulle classi "facili".
-
----
 
 ## 5. Risultati Sperimentali
 
-### 5.1 Performance del Modello Baseline (Solo Sintetici → Test Reali)
-
-Il modello addestrato esclusivamente su dati sintetici viene valutato sul test set reale (1090 finestre bilanciate):
-
-| Classe | Precision | Recall | F1 | Support |
-|--------|-----------|--------|----|---------|
-| Normale | 0.93 | 0.99 | 0.96 | 545 |
-| LA-RA | 0.57 | 0.99 | 0.72 | 109 |
-| RA-LL | 0.97 | 0.83 | 0.89 | 109 |
-| LA-LL | 0.95 | 0.64 | 0.77 | 109 |
-| ROT_ORA | 1.00 | 0.99 | 1.00 | 109 |
-| ROT_ANT | 0.98 | 0.41 | 0.58 | 109 |
-| **Media (Macro)** | **0.90** | **0.81** | **0.82** | **1090** |
-
-**Metriche globali**:
-- **Accuratezza Totale**: 88.26%
-- **AUROC (Macro)**: 0.9903
-- **AuPRC (Macro)**: 0.9434
-
-**Analisi degli errori**:
-- La classe **ROT_ANT** mostra ancora il recall più basso (41%), seppur in miglioramento, segnalando che il modello baseline fa fatica sulle varianti complesse.
-- La classe **LA-LL** ha un recall del 64%, mostrando ancora difficoltà nel distinguere i pattern da casi normali.
-- **ROT_ORA** e **Normale** mantengono performance eccellenti (recall quasi al 100%).
-
-### 5.2 Performance sui Dati Simulati
+### 5.1 Performance sui Dati  (Sim-to-sim)
 
 Lo stesso modello baseline valutato sul test set sintetico (73.542 finestre, 12.257/classe):
 
@@ -487,36 +445,31 @@ Lo stesso modello baseline valutato sul test set sintetico (73.542 finestre, 12.
 
 ![Matrice di confusione](src/training/unlabelled_simulated_weights_and_cm/prova2.png)
 
-### 5.3 Performance del Modello Fine-Tuned
+### 5.2 Performance del Modello Baseline (Solo Sintetici → Test Reali)
 
-Per colmare ulteriormente le confusioni residue sulle classi più complesse (in particolare `ROT_ANT` e `RA-LL`), il modello è stato sottoposto a una fase di fine-tuning controllata (`resume_train_limbs.py`). In questa fase, sono stati sbloccati solo gli ultimi 3 layer (il classificatore denso finale) per garantire maggiore flessibilità senza distruggere le feature apprese in precedenza. L'addestramento è stato condotto con un learning rate ridotto ($10^{-5}$) e pesi differenziati per classe (`class_weights` maggiorati fino a 1.8x per `ROT_ANT` e 1.5x per `RA-LL` e `ROT_ORA`).
-
-Di seguito i risultati sul test set reale (1090 finestre bilanciate) post fine-tuning:
+Il modello addestrato esclusivamente su dati sintetici viene valutato sul test set reale (1090 finestre bilanciate):
 
 | Classe | Precision | Recall | F1 | Support |
 |--------|-----------|--------|----|---------|
-| Normale | 0.96 | **1.00** | 0.98 | 545 |
-| LA-RA | 0.60 | 0.97 | 0.74 | 109 |
-| RA-LL | 0.97 | 0.76 | 0.85 | 109 |
-| LA-LL | 0.99 | 0.82 | 0.89 | 109 |
-| ROT_ORA | **1.00** | 0.97 | **0.99** | 109 |
-| ROT_ANT | 0.96 | 0.59 | 0.73 | 109 |
-| **Media (Macro)** | **0.91** | **0.85** | **0.86** | **1090** |
+| Normale | 0.93 | 0.99 | 0.96 | 545 |
+| LA-RA | 0.57 | 0.99 | 0.72 | 109 |
+| RA-LL | 0.97 | 0.83 | 0.89 | 109 |
+| LA-LL | 0.95 | 0.64 | 0.77 | 109 |
+| ROT_ORA | 1.00 | 0.99 | 1.00 | 109 |
+| ROT_ANT | 0.98 | 0.41 | 0.58 | 109 |
+| **Media (Macro)** | **0.90** | **0.81** | **0.82** | **1090** |
 
-**Metriche globali post Fine-Tuning**:
-- **Accuratezza Totale**: 91.01% (vs 88.26% della baseline pre-fine-tuning)
-- **AUROC (Macro)**: 0.9896
-- **AuPRC (Macro)**: 0.9414
+**Metriche globali**:
+- **Accuratezza Totale**: 88.26%
+- **AUROC (Macro)**: 0.9903
+- **AuPRC (Macro)**: 0.9434
 
-**Analisi degli Errori Residui**:
-- L'introduzione dei *class weights* ha innalzato il recall di **ROT_ANT** dal 41% al 59% e mantenuto quello di **RA-LL** a livelli ottimali (76%), riducendo l'ambiguità complessiva.
-- Tuttavia, la classe `LA-RA` si dimostra un "attrattore" per le inversioni più complesse: assorbe infatti ben 45 errori provenienti da `ROT_ANT` e 26 errori provenienti da `RA-LL`. Questa sovrapposizione è giustificata dalle forti similarità morfologiche derivanti dalle alterazioni dell'asse cardiaco frontale.
-- Il recall di **LA-LL** è salito notevolmente (dal 64% all'82%), sebbene il modello fatichi ancora leggermente su pattern ambigui, classificando 20 finestre invertite come tracciati normali.
-- L'accuratezza complessiva è balzata al **91%**, dimostrando l'efficacia del parziale decongelamento dei pesi abbinato alle penalità asimmetriche per le classi difficili.
+**Analisi degli errori**:
+- La classe **ROT_ANT** mostra ancora il recall più basso (41%), seppur in miglioramento, segnalando che il modello baseline fa fatica sulle varianti complesse.
+- La classe **LA-LL** ha un recall del 64%, mostrando ancora difficoltà nel distinguere i pattern da casi normali.
+- **ROT_ORA** e **Normale** mantengono performance eccellenti (recall quasi al 100%).
 
-![alt text](src/training/unlabelled_final_noise_weights_and_cm/sim_real_ftun_test.png)
-
-### 5.4 Estensione alle Derivazioni Precordiali (Sim-to-Sim)
+### 5.3 Estensione alle Derivazioni Precordiali (Sim-to-Sim)
 
 Il sistema è stato esteso per rilevare 15 classi di inversioni complesse tra le derivazioni toraciche (V1-V6). A causa della fisiologia progressiva del segnale precordiale, la validazione è stata condotta tramite la rete **ILC**. Di seguito i risultati del test set simulato (6591 finestre) per le 16 classi totali:
 

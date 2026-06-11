@@ -219,8 +219,8 @@ def collect_pseudo_windows(pseudolabels: list):
                bar_format="{l_bar}{bar:30}{r_bar}")
     for entry in bar:
         label    = entry['predicted_class']
-        if label == 0:  # Salta la classe normale
-            continue
+        # if label == 0:  # Salta la classe normale
+        #     continue
         ecg_id   = entry['id']
         zip_path = entry['zip_path']
 
@@ -250,7 +250,23 @@ def collect_pseudo_windows(pseudolabels: list):
     Y_pseudo = np.array(all_labels, dtype=np.int8)
     return X_pseudo, Y_pseudo
 
-
+def augment_ecg_windows(X_batch, noise_level=0.03, scale_range=(0.90, 1.10)):
+    """
+    Applica Data Augmentation a un batch di finestre ECG: (N, leads, samples).
+    Aggiunge rumore gaussiano e variazione di gain casuale.
+    """
+    X_aug = X_batch.copy()
+    
+    # 1. Rumore Gaussiano (simula interferenze)
+    noise = np.random.normal(0, noise_level, X_aug.shape)
+    X_aug += noise
+    
+    # 2. Random Scaling (simula sbalzi di ampiezza)
+    scales = np.random.uniform(scale_range[0], scale_range[1], 
+                               size=(X_aug.shape[0], X_aug.shape[1], 1))
+    X_aug *= scales
+    
+    return X_aug.astype(np.float32)
 # ---------------------------------------------------------------------------
 # Upsampling
 # ---------------------------------------------------------------------------
@@ -285,8 +301,18 @@ def upsample_pseudo(X_pseudo, Y_pseudo, n_orig_subset, target_ratio=TARGET_RATIO
         remainder = class_target % n_class
 
         if upsample_factor > 0:
-            X_class = np.tile(X_pseudo[class_indices], (upsample_factor, 1, 1))
-            Y_class = np.tile(Y_pseudo[class_indices], upsample_factor)
+            # ---> 1. La prima copia resta pulita e originale <---
+            X_class_list = [X_pseudo[class_indices]]
+            Y_class_list = [Y_pseudo[class_indices]]
+            
+            # ---> 2. Le successive (upsample_factor - 1) sono aumentate <---
+            for _ in range(upsample_factor - 1):
+                X_aug = augment_ecg_windows(X_pseudo[class_indices])
+                X_class_list.append(X_aug)
+                Y_class_list.append(Y_pseudo[class_indices])
+                
+            X_class = np.concatenate(X_class_list, axis=0)
+            Y_class = np.concatenate(Y_class_list, axis=0)
         else:
             X_class = np.empty((0, 12, SAMPLES_PER_WINDOW), dtype=np.float32)
             Y_class = np.empty((0,), dtype=np.int8)
@@ -294,8 +320,12 @@ def upsample_pseudo(X_pseudo, Y_pseudo, n_orig_subset, target_ratio=TARGET_RATIO
         if remainder > 0:
             np.random.seed(42 + c)
             chosen_remainder_idx = np.random.choice(class_indices, size=remainder, replace=(remainder > n_class))
-            X_rem = X_pseudo[chosen_remainder_idx]
+            X_rem_base = X_pseudo[chosen_remainder_idx]
+            
+            # ---> 3. Applichiamo augmentation anche ai resti <---
+            X_rem = augment_ecg_windows(X_rem_base)
             Y_rem = Y_pseudo[chosen_remainder_idx]
+            
             X_class = np.concatenate([X_class, X_rem], axis=0) if len(X_class) > 0 else X_rem
             Y_class = np.concatenate([Y_class, Y_rem], axis=0) if len(Y_class) > 0 else Y_rem
 
@@ -313,7 +343,6 @@ def upsample_pseudo(X_pseudo, Y_pseudo, n_orig_subset, target_ratio=TARGET_RATIO
     actual_pct = 100 * len(Y_up) / (n_orig_subset + len(Y_up))
     print(f"  Finestre pseudo-labeled finali:    {len(Y_up):,}  ({actual_pct:.1f}% del totale)")
     return X_up, Y_up
-
 
 
 # ---------------------------------------------------------------------------

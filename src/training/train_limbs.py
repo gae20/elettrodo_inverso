@@ -35,8 +35,6 @@ def evaluater(x_test, y_test, model, path):
     print(f"\n> Generazione report e matrice per: {os.path.basename(path)}")
     y_pred = model.predict(x_test, batch_size=32)
     num_classes = y_pred.shape[-1]
-    
-    # Rimosso il threshold. Il modello sceglie semplicemente la classe con probabilità più alta.
     y_pred_idx = np.argmax(y_pred, axis=1)
     
     acc = len(np.where(y_pred_idx==y_test)[0])/y_pred_idx.shape[0]
@@ -71,8 +69,6 @@ class H5DataGenerator(tf.keras.utils.Sequence):
         self.shuffle = shuffle
         with h5py.File(self.file_path, 'r') as f:
             y_all = f['Y'][:]
-            # Filtriamo solo le classi supportate dal modello (es. 0-5)
-            # Questo evita crash se segnali RN/LN passano la SQA
             self.indices = np.where(y_all < self.num_classes)[0]
             self.total_samples = len(self.indices)
             
@@ -95,9 +91,6 @@ class H5DataGenerator(tf.keras.utils.Sequence):
         with h5py.File(self.file_path, 'r') as f:
             x = f['X'][idx_sorted]
             y = f['Y'][idx_sorted]
-            
-        # The data pipeline stores shape (N, 12, SAMPLES)
-        # For Limbs, we only take the first 6 channels
         x_limbs = x[:, :6, :]
         x_transposed = np.transpose(x_limbs, (0, 2, 1))
         try:
@@ -164,23 +157,19 @@ if __name__ == '__main__':
         x_norm = (x - medians) / scale_global
         return x_norm
 
-    # --- CONFIGURAZIONE PATH DATASET (FINAL NOISE) ---
     dataset_dir = "../../datasets/unlabelled_simulated_final"
     dataset_path_val   = os.path.join(dataset_dir, "unlabelled_z_median_limbs_val.h5")
     dataset_path_train = os.path.join(dataset_dir, "unlabelled_z_median_limbs_train.h5")
     
-    # Usiamo il test set di validazione reale standard (quello ricreato oggi)
     dataset_path_test = "../../datasets/labelled_z_median_limbs_test_validation.h5"
     print(f"Caricamento dati di test REALI da: {dataset_path_test}")
     with h5py.File(dataset_path_test, 'r') as f:
-        # I dati sono GIÀ normalizzati con Robust Scaler dallo script testset_validation.py
         x_test_raw = f['X'][:, :6, :]
         x_test = np.transpose(x_test_raw, (0, 2, 1))
         y_test = f['Y'][:]
         
     print(f"Caricamento dati di validazione da: {dataset_path_val}")
     with h5py.File(dataset_path_val, 'r') as f:
-        # I dati simulati di validazione sono GIÀ normalizzati
         x_val_raw = f['X'][:, :6, :]
         x_val_eval = np.transpose(x_val_raw, (0, 2, 1))
         y_val_eval = f['Y'][:]
@@ -191,15 +180,14 @@ if __name__ == '__main__':
         print(f"  Label Range: [{np.min(y_train_all)}, {np.max(y_train_all)}], Unique: {np.unique(y_train_all)}")
 
     input_shape = (SAMPLES_PER_WINDOW, 6)
-    output_dims = 6 # 1 normale + 5 anomalie
+    output_dims = 6 
     EP = 50
     LR = 1e-3 
     BS = 256
     
-    # Cartella per i pesi e i risultati (Final Multi-Level Noise)
     out_weights_dir = 'unlabelled_z_median_weights_and_cm'
     os.makedirs(out_weights_dir, exist_ok=True)
-    save_path = os.path.join(out_weights_dir, 'PROVA_best_model_targeted_noise_limbs.weights.h5')
+    save_path = os.path.join(out_weights_dir, '0506_best_model_targeted_noise_limbs.weights.h5')
     
     base_dir = os.path.dirname(os.path.abspath(__file__))
 

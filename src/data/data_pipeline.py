@@ -15,10 +15,6 @@ from utils.config import (
     ACTIVE_SYNTH_CLASSES, QUALITY_CFG
 )
 
-<<<<<<< Updated upstream
-# Cartella locale dove sono i file EDF estratti
-LOCAL_DATASETS_DIR = os.path.join(os.path.dirname(__file__), '..', '..', 'datasets', 'dataset')
-=======
 # --- S3 CONFIGURATION ---
 from dotenv import load_dotenv
 
@@ -32,7 +28,6 @@ ECG_PATH = BASE_PATH + "record%s.edf"
 
 # Cartella locale dove sono i file EDF scaricati dalla console S3
 LOCAL_DATASETS_DIR = os.path.join(os.path.dirname(__file__), '..', '..', '..', 'datasets', 'dataset')
->>>>>>> Stashed changes
 
 def _parse_edf_file(filepath):
     """
@@ -110,7 +105,6 @@ def leads_preprocessing(raw_signal):
     x = np.nan_to_num(x, nan=0.0, posinf=0.0, neginf=0.0)
 
     # 1. Notch Filter (50Hz Powerline Interference)
-    # iirnotch con Q=30, poi applicato con filtfilt (zero-phase, nessuna distorsione di fase)
     b_notch, a_notch = signal.iirnotch(50.0, 30.0, fs=FS_OLD)
     x = signal.filtfilt(b_notch, a_notch, x)
 

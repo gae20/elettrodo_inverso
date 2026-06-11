@@ -52,6 +52,7 @@ ACTIVE_SYNTH_CLASSES = list(MAPPING_INV.keys())[:5]
 FLATLINE_CLASSES = {'RL-RA', 'RL-LA'}
 
 # --- CLASSES MAP (Precordial Leads) ---
+# --- CLASSES MAP (Precordial Leads) ---
 PRECORDIAL_MAPPING = {
     'V1-V2': 1, 'V1-V3': 2, 'V1-V4': 3, 'V1-V5': 4, 'V1-V6': 5,
     'V2-V3': 6, 'V2-V4': 7, 'V2-V5': 8, 'V2-V6': 9,
@@ -60,6 +61,9 @@ PRECORDIAL_MAPPING = {
     'V5-V6': 15
 }
 
+# AGGIUNGI QUESTE DUE RIGHE PER FAR FUNZIONARE LO SCRIPT:
+MAPPING_INV_PREC = PRECORDIAL_MAPPING
+ACTIVE_SYNTH_CLASSES_PREC = list(MAPPING_INV_PREC.keys())
 # --- SIGNAL QUALITY CONFIGURATION ---
 # Adjusted for Holter monitors which can be noisier.
 QUALITY_CFG = {

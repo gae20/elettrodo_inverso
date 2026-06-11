@@ -4,8 +4,8 @@ import csv
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(SCRIPT_DIR, 'results')
-JSON_PATH = os.path.join(RESULTS_DIR, 'pseudolabels.json')
-CSV_PATH = os.path.join(RESULTS_DIR, 'pseudolabels_report.csv')
+JSON_PATH = os.path.join(RESULTS_DIR, 'pseudolabels_PROVA.json')
+CSV_PATH = os.path.join(RESULTS_DIR, 'pseudolabels_report_PROVA.csv')
 
 if not os.path.exists(JSON_PATH):
     print(f"Errore: {JSON_PATH} non trovato. Esegui prima lo step 2.")
